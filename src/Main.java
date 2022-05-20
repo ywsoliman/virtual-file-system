@@ -19,7 +19,6 @@ public class Main {
         sub1.addFile(file1);
         sub2.addFile(file2);
 
-
         Directory sub3 = new Directory("FINAL");
 
         root.addSubDirectory(sub3);
@@ -33,10 +32,8 @@ public class Main {
         Directory insideSub3 = new Directory("A-Directory-In-Final-Directory");
         sub3.addSubDirectory(insideSub3);
 
-        root.printFiles();
-        root.printSubDirectories();
-
-
+        root.printDirectoryStructure(0);
+        
     }
 
 }
