@@ -51,13 +51,17 @@ public class Main {
                     root.deleteFolder(command[1]);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFile")) {
-
+                    root.deleteFile(command[1]);
                 }
+                else
+                    System.out.println("Invalid arguments.");
             }
             else if (command.length == 3)
             {
-
+                root.createFile(command);
             }
+            else
+                System.out.println("Something went wrong. Try again.");
 
         }
 

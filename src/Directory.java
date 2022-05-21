@@ -29,6 +29,37 @@ public class Directory {
         this.directoryName = directoryName;
     }
 
+    public void createFile(String[] args) {
+
+        String[] path = args[args.length - 2].split("/");
+        String fileName = path[path.length - 1];
+        int fileSize = Integer.parseInt(args[args.length - 1]);
+
+        File createdFile = new File(fileName, fileSize);
+        Directory parentDirectory = getPreviousDirectory(path);
+
+        for (File file : parentDirectory.files) {
+            if (file.getFileName().equalsIgnoreCase(fileName)) {
+                System.out.println("File already existed");
+                return;
+            }
+        }
+        parentDirectory.files.add(createdFile);
+        System.out.println("File created successfully");
+    }
+
+    public void deleteFile(String command) {
+        String[] splitPath = command.split("/");
+        Directory parentDirectory = getPreviousDirectory(splitPath);
+        for (File file : parentDirectory.files) {
+            if (file.getFileName().equalsIgnoreCase(splitPath[splitPath.length - 1])) {
+                parentDirectory.files.remove(file);
+                System.out.println("File removed successfully");
+                return;
+            }
+        }
+    }
+
     public Directory searchForSubDirectory(String name) {
         for (Directory dir : subDirectories)
             if (dir.getDirectoryName().equalsIgnoreCase(name))
@@ -83,10 +114,11 @@ public class Directory {
 
     public void deleteFolder(String command) {
         String[] splitPath = command.split("/");
-        for (Directory sub : subDirectories) {
+        Directory parentDirectory = getPreviousDirectory(splitPath);
+        for (Directory sub : parentDirectory.subDirectories) {
             if (sub.getDirectoryName().equalsIgnoreCase(splitPath[splitPath.length - 1])) {
                 sub.deleteSubDirectories();
-                subDirectories.remove(sub);
+                parentDirectory.subDirectories.remove(sub);
                 System.out.println("Folder removed successfully");
                 return;
             }

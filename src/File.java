@@ -4,11 +4,13 @@ public class File {
 
     private String fileName;
     private String filePath;
+    private int fileSize;
     private ArrayList<Integer> allocatedBlocks;
 
-    public File(String fileName) {
+    public File(String fileName, int fileSize) {
         allocatedBlocks = new ArrayList<>();
         this.fileName = fileName;
+        this.fileSize = fileSize;
     }
 
     public String getFileName() {
