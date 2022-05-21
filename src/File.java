@@ -29,6 +29,14 @@ public class File {
         this.filePath = filePath;
     }
 
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(int fileSize) {
+        this.fileSize = fileSize;
+    }
+
     @Override
     public String toString() {
         return fileName;
