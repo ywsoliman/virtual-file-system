@@ -4,9 +4,10 @@ public class Directory {
 
     private String directoryPath;
     private String directoryName;
-    private ArrayList<File> files;
+    private ArrayList<Myfile> files; 
     private ArrayList<Directory> subDirectories;
 
+    public Directory() {}
     public Directory(String directoryName) {
         files = new ArrayList<>();
         subDirectories = new ArrayList<>();
@@ -35,10 +36,10 @@ public class Directory {
         String fileName = path[path.length - 1];
         int fileSize = Integer.parseInt(args[args.length - 1]);
 
-        File createdFile = new File(fileName, fileSize);
+        Myfile createdFile = new Myfile(fileName, fileSize);
         Directory parentDirectory = getPreviousDirectory(path);
 
-        for (File file : parentDirectory.files) {
+        for (Myfile file : parentDirectory.files) {
             if (file.getFileName().equalsIgnoreCase(fileName)) {
                 System.out.println("File already existed");
                 return;
@@ -51,7 +52,7 @@ public class Directory {
     public void deleteFile(String command) {
         String[] splitPath = command.split("/");
         Directory parentDirectory = getPreviousDirectory(splitPath);
-        for (File file : parentDirectory.files) {
+        for (Myfile file : parentDirectory.files) {
             if (file.getFileName().equalsIgnoreCase(splitPath[splitPath.length - 1])) {
                 parentDirectory.files.remove(file);
                 System.out.println("File removed successfully");
@@ -131,7 +132,7 @@ public class Directory {
             System.out.print("\t");
         }
         System.out.println(directoryName + "/");
-        for (File file : files) {
+        for (Myfile file : files) {
             for (int i = 0; i < level + 1; i++) {
                 System.out.print("\t");
             }

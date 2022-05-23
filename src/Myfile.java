@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
-public class File {
+public class Myfile {
 
     private String fileName;
     private String filePath;
     private int fileSize;
     private ArrayList<Integer> allocatedBlocks;
 
-    public File(String fileName, int fileSize) {
+    public Myfile(String fileName, int fileSize) {
         allocatedBlocks = new ArrayList<>();
         this.fileName = fileName;
         this.fileSize = fileSize;
