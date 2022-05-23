@@ -21,22 +21,24 @@ public class LinkedAllocation extends AllocationScheme{
 	}
 
 
+
+
 	@Override
-	public void searchForSpace(int size) {
+	public void allocateBlocks(Myfile file, int startBlock) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void allocateBlocks(String file, int size) {
+	public void deallocateBlocks(Myfile file) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void deallocateBlocks(String file) {
+	public boolean searchForSpace(Myfile file) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }

@@ -1,8 +1,0 @@
-10 				//size of disk
-Contigous 			//Allocation Tybe
-101010001 			//space manager data
-root/file1.txt 	34 3		//root has one file and two folders each has one file (any alloc method)
-root/folder1 
-root/folder2
-root/folder1/file1.txt
-root/folder2/file1.txt

@@ -1,3 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Directory {
@@ -30,13 +34,14 @@ public class Directory {
         this.directoryName = directoryName;
     }
 
-    public void createFile(String[] args) {
+    public void createFile(String[] args, AllocationScheme alloc) {
 
         String[] path = args[args.length - 2].split("/");
         String fileName = path[path.length - 1];
         int fileSize = Integer.parseInt(args[args.length - 1]);
 
         Myfile createdFile = new Myfile(fileName, fileSize);
+        createdFile.setFilePath(args[args.length - 2]);
         Directory parentDirectory = getPreviousDirectory(path);
 
         for (Myfile file : parentDirectory.files) {
@@ -45,15 +50,22 @@ public class Directory {
                 return;
             }
         }
-        parentDirectory.files.add(createdFile);
+        
+        if(alloc.searchForSpace(createdFile)) 						//Allocation
+        	parentDirectory.files.add(createdFile);
+        
+        
+        //System.out.println(parentDirectory.directoryName);
         System.out.println("File created successfully");
+
     }
 
-    public void deleteFile(String command) {
+    public void deleteFile(String command, AllocationScheme alloc) {
         String[] splitPath = command.split("/");
         Directory parentDirectory = getPreviousDirectory(splitPath);
         for (Myfile file : parentDirectory.files) {
             if (file.getFileName().equalsIgnoreCase(splitPath[splitPath.length - 1])) {
+            	alloc.deallocateBlocks(file); 					// Deallocation
                 parentDirectory.files.remove(file);
                 System.out.println("File removed successfully");
                 return;
@@ -140,6 +152,36 @@ public class Directory {
         }
         for (Directory dir : subDirectories) {
             dir.printDirectoryStructure(level + 1);
+        }
+    }
+    
+    
+    //method to append to file
+    public static void appendStrToFile(String fileName,
+            String str)
+    {
+    	try {
+            BufferedWriter out = new BufferedWriter(
+                new FileWriter(fileName, true));
+ 
+            out.write(str);
+            out.close();
+        }
+        catch (IOException e) 
+    	{
+ 
+            System.out.println("exception occurred" + e);
+        }
+    }
+    
+    public void writeFilesPath(Directory dir,  File file) {
+        for (Myfile myfile : dir.files) {
+
+            //System.out.println(myfile.getFilePath());
+        	appendStrToFile(file.getName(), myfile.getFilePath());
+        }
+        for (Directory dir2 : dir.subDirectories) {
+        	writeFilesPath(dir2, file);
         }
     }
 

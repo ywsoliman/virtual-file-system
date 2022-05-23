@@ -17,8 +17,10 @@ public class Main {
         int diskSize = 0;
         
         File myObj = new File("DiskStructure.txt");
+        
         if (myObj.createNewFile()) {  //VFS file is created for the first time
             int allocationMethod;
+            
             System.out.println("Choose an allocation method: ");
             System.out.print("1- Contiguous Allocation\n2- Indexed Allocation\n3- Linked Allocation\n");
             allocationMethod = sc.nextInt();
@@ -37,7 +39,7 @@ public class Main {
         	
         	ArrayList<String> restOfVFS = new ArrayList<String>();
        
-        	BufferedReader bf = new BufferedReader(new FileReader("file.txt"));
+        	BufferedReader bf = new BufferedReader(new FileReader("DiskStructure.txt"));
        
         	String data = bf.readLine();
         	
@@ -126,14 +128,14 @@ public class Main {
                     root.deleteFolder(command[1]);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFile")) {
-                    root.deleteFile(command[1]);
+                    root.deleteFile(command[1], alloc);
                 }
                 else
                     System.out.println("Invalid arguments.");
             }
             else if (command.length == 3)
             {
-                root.createFile(command);
+                root.createFile(command, alloc);
             }
             else
                 System.out.println("Something went wrong. Try again.");
