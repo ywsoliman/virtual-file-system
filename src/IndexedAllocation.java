@@ -17,19 +17,8 @@ public class IndexedAllocation extends AllocationScheme{
 	
 	
 	@Override
-	public void allocateBlocks(Myfile file) {  //startBlock is not using
-		/*String newstr = "";
-		for(int i=0; i<spaceManager.length(); i++)
-		{
-			if(spaceManager.charAt(i)=='0')
-			{
-				newstr += '1';
-				counter--;
-				fileOfBlocks.add(i);
-			}
-			else newstr += spaceManager.charAt(i);
-		}
-		*/
+	public void allocateBlocks(Myfile file) { 
+		
 		ArrayList<Integer> fileOfBlocks = new ArrayList<Integer>();
 		String newstr = "";
 		int counter = file.getFileSize();
@@ -49,8 +38,6 @@ public class IndexedAllocation extends AllocationScheme{
 		filesData.put(file, Allocatedblocks.indexOf(fileOfBlocks));
 		freeBlocks -= file.getFileSize();
 		
-		//System.out.println(filesData.get(file));
-		//System.out.println(Allocatedblocks.get(filesData.get(file)).toString());
 		
 	}
 
@@ -78,7 +65,7 @@ public class IndexedAllocation extends AllocationScheme{
 		spaceManager = newstr;
 		filesData.remove(file);
 		freeBlocks += file.getFileSize();
-		//I can't delete from the array of blocks numbers since the index will decrease by 1
+		
 	}
 
 
@@ -116,7 +103,6 @@ public class IndexedAllocation extends AllocationScheme{
         	try 
         	{
                 myWriter.write(myfile.getFilePath()+" "+filesData.get(myfile) +System.getProperty( "line.separator" ));
-                //System.out.println(filesData.get(myfile));
                 ArrayList<Integer> fileOfBlocks = new ArrayList<Integer>(Allocatedblocks.get(filesData.get(myfile)));
                 for(int i=0;i<fileOfBlocks.size();i++)
                 {

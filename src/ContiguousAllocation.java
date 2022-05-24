@@ -18,34 +18,49 @@ public class ContiguousAllocation extends AllocationScheme {
 	}
 
 
-
+	
 	
 
 	@Override
 	public void allocateBlocks(Myfile file) {
+		HashMap<Integer, Integer> groupBlocks = new HashMap<Integer, Integer>();
+		
 		int startBlock = 0;
 		
-		int counter = 0;
-		for(int i=0; i<diskSize; i++)
+		groupBlocks.put(diskSize, 0);
+		
+		int counter = 0, i;
+		for(i=0; i<diskSize; i++)
 		{
 			if(spaceManager.charAt(i) =='0')
 				counter++;
-			else counter = 0;
-			
-			//System.out.println(counter);
-			if(counter>=file.getFileSize())
+			else 
 			{
-				startBlock = (i-counter)+1;
-				break;
+				groupBlocks.put(counter, i-counter);
+				counter=0;
+				
 			}
 		}
-		
-		String newstr = "";
-		for(int i=0; i<spaceManager.length(); i++)
+		groupBlocks.put(counter, i-counter);
+		List<Integer> sortedGp = new ArrayList<>(groupBlocks.keySet());
+		Collections.sort(sortedGp);
+		int l = 0;
+		while(true)
 		{
-			if(i>=startBlock && i<startBlock+file.getFileSize())
+			if(sortedGp.get(l)>=file.getFileSize())
+			{
+				startBlock = groupBlocks.get(sortedGp.get(l));
+				break;
+			}
+			l++;
+		}
+
+		String newstr = "";
+		for(int f=0; f<spaceManager.length(); f++)
+		{
+			if(f>=startBlock && f<startBlock+file.getFileSize())
 				newstr += '1';
-			else newstr += spaceManager.charAt(i);
+			else newstr += spaceManager.charAt(f);
 		}
 		spaceManager = newstr;
 		filesData.put(file, startBlock);

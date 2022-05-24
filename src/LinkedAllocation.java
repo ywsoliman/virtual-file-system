@@ -16,8 +16,6 @@ public class LinkedAllocation extends AllocationScheme{
 	public void allocateBlocks(Myfile file) {
         int linkedBlocks = 0;
         
-       
-        
         while (linkedBlocks != file.getFileSize()) {
            int randomNum = getRandomNumber(0, diskSize);
            if(spaceManager.charAt(randomNum) != '1' && !file.linkedBlocksList.contains(randomNum)) {

@@ -62,9 +62,6 @@ public class Directory {
         	return null;
         }
         	
-        
-        //System.out.println(createdFile.getFileSize());
-        //System.out.println(parentDirectory.directoryName);
         System.out.println("File created successfully");
         return createdFile;
 

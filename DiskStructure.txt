@@ -1,4 +1,0 @@
-20
-Contiguous
-00000000001111100000
-root/file2.txt 10 5
