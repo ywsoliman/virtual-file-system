@@ -41,26 +41,31 @@ public class Main {
        
         	BufferedReader bf = new BufferedReader(new FileReader("DiskStructure.txt"));
        
+        	//String data = ;
+        	
+        	diskSize = Integer.parseInt(bf.readLine());
+        	        	
         	String data = bf.readLine();
         	
-        	diskSize = Integer.parseInt(data);
-        	
-        	data = bf.readLine();
-        	
             if (data.equalsIgnoreCase("Contiguous"))
-                alloc = new ContiguousAllocation(diskSize, root);
+            	alloc = new ContiguousAllocation(diskSize, root);                
             else if (data.equalsIgnoreCase("Indexed"))
             	alloc = new IndexedAllocation(diskSize, root);
             else if (data.equalsIgnoreCase("Linked"))
             	alloc = new LinkedAllocation(diskSize, root);
-       
+            
+            System.out.println(data);
+            alloc.setSpaceManager(bf.readLine());
+            
+            data = bf.readLine();
+           
         	while (data != null) {
         		restOfVFS.add(data);
         		data = bf.readLine();
         	}
-       
+        	System.out.println(restOfVFS.toString());
         	bf.close();
-        	alloc.loadVFS(restOfVFS);
+        	alloc.loadVFS(restOfVFS, root);
         	
         	/*
         	Scanner myReader = new Scanner(myObj);
@@ -143,7 +148,7 @@ public class Main {
         }
         
         
-        alloc.saveVFS(myObj);
+        alloc.saveVFS(myObj, root);
 
         /*
         File rootFile = new File("test.pdf");

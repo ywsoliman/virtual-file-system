@@ -6,7 +6,7 @@ public class Myfile {
     private String filePath;
     private int fileSize;
     private ArrayList<Integer> allocatedBlocks;
-
+   
     public Myfile(String fileName, int fileSize) {
         allocatedBlocks = new ArrayList<>();
         this.fileName = fileName;

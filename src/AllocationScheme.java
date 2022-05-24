@@ -16,18 +16,18 @@ public abstract class AllocationScheme {
 		spaceManager = "";
 		for(int i=0;i<diskSize;i++)
 		{
-			spaceManager+='1';
+			spaceManager+='0';
 		}
 		freeBlocks = diskSize;
-		System.out.println(spaceManager);
+		
 	}
 	public void setSpaceManager(String data)
 	{
 		spaceManager = data;
 	}
 	
-	public abstract void loadVFS(ArrayList<String> arr);
-	public abstract void saveVFS(File file);
+	public abstract void loadVFS(ArrayList<String> arr, Directory root);
+	public abstract void saveVFS(File file, Directory root);
 	public abstract void allocateBlocks(Myfile file, int startBlock);
 	public abstract void deallocateBlocks(Myfile file);
 	public abstract boolean searchForSpace(Myfile file);

@@ -1,3 +1,4 @@
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,11 +23,11 @@ public class ContiguousAllocation extends AllocationScheme {
 		int counter = 0;
 		for(int i=0; i<diskSize; i++)
 		{
-			if(spaceManager.charAt(i) =='1')
+			if(spaceManager.charAt(i) =='0')
 				counter++;
 			else counter = 0;
 			
-			
+			//System.out.println(counter);
 			if(counter>=file.getFileSize())
 			{
 				allocateBlocks(file, (i-counter)+1);
@@ -40,28 +41,31 @@ public class ContiguousAllocation extends AllocationScheme {
 
 	@Override
 	public void allocateBlocks(Myfile file, int startBlock) {
-		for(int i=0; i<file.getFileSize(); i++)
+		String newstr = "";
+		for(int i=0; i<spaceManager.length(); i++)
 		{
-			
-			String newstr = spaceManager.replace(spaceManager.charAt(i+startBlock), '0');
-			spaceManager = newstr;
+			if(i>=startBlock && i<startBlock+file.getFileSize())
+				newstr += '1';
+			else newstr += spaceManager.charAt(i);
 		}
-		
+		spaceManager = newstr;
 		filesData.put(file, startBlock);
 	}
 	
 	
 	@Override
 	public void deallocateBlocks(Myfile file) {
-		int startblock = filesData.get(file);
+		int startBlock = filesData.get(file);
 		
-		for(int i=0; i<file.getFileSize(); i++)
+		String newstr = "";
+		for(int i=0; i<spaceManager.length(); i++)
 		{
-			
-			String newstr = spaceManager.replace(spaceManager.charAt(i+startblock), '1');
-			spaceManager = newstr;
+			if(i>=startBlock && i<startBlock+file.getFileSize())
+				newstr += '0';
+			else newstr += spaceManager.charAt(i);
 		}
-		
+		spaceManager = newstr;
+		filesData.put(file, startBlock);
 		
 		filesData.remove(file);
 	}
@@ -69,7 +73,7 @@ public class ContiguousAllocation extends AllocationScheme {
 
 
 	@Override
-	public void saveVFS(File file) {
+	public void saveVFS(File file,  Directory root) {
 		
 	      
 		try 
@@ -78,10 +82,12 @@ public class ContiguousAllocation extends AllocationScheme {
 			 
 		     myWriter.write(diskSize + System.getProperty( "line.separator" ));
 		     
-		     myWriter.write("Contigous " + System.getProperty( "line.separator" ));
+		     myWriter.write("Contiguous" + System.getProperty( "line.separator" ));
+		     
+		     myWriter.write(spaceManager+ System.getProperty( "line.separator" ));
 		     
 
-		     root.writeFilesPath(root, file);
+		     writeFilesPath(root, file, myWriter);
 		     
 		     myWriter.close();
 		     
@@ -95,15 +101,51 @@ public class ContiguousAllocation extends AllocationScheme {
 	}
 
 
+    public void writeFilesPath(Directory dir,  File file, FileWriter myWriter) {
+        for (Myfile myfile : dir.files) {
+        	try 
+        	{
+                myWriter.write(myfile.getFilePath()+" "+filesData.get(myfile)+" "+myfile.getFileSize()+ System.getProperty( "line.separator" ));
+            }
+            catch (IOException e) 
+        	{
+                System.out.println("exception occurred" + e);
+            }
+        
+        }
+        for (Directory dir2 : dir.subDirectories) {
+        	try 
+        	{
+                myWriter.write(dir2.getDirectoryPath()+System.getProperty( "line.separator" ));
+            }
+            catch (IOException e) 
+        	{
+                System.out.println("exception occurred" + e);
+            }
+        	writeFilesPath(dir2, file,  myWriter);
+        }
+    }
+
 
 	@Override
-	public void loadVFS(ArrayList<String> arr) { //load to allocation data structures and root
-		// TODO Auto-generated method stub
+	public void loadVFS(ArrayList<String> arr, Directory root) { //load to allocation data structures and root
+		for(int i=0; i<arr.size(); i++)
+		{
+			if(arr.get(i).contains(".txt"))
+			{
+				String temp = "CreateFile "+arr.get(i);
+				String[] tempArray = temp.split(" ");
+				String[] command = new String[tempArray.length-1];
+				
+				command[0]=tempArray[0];
+				command[1]=tempArray[1];
+				command[2]=tempArray[3];
+				root.createFile(command, this);
+			}
+			else
+				root.createFolder(arr.get(i));
+		}
 		
 	}
-
-
-
-
 	
 }

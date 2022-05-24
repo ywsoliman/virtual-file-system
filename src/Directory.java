@@ -8,8 +8,8 @@ public class Directory {
 
     private String directoryPath;
     private String directoryName;
-    private ArrayList<Myfile> files; 
-    private ArrayList<Directory> subDirectories;
+    public ArrayList<Myfile> files; 
+    public ArrayList<Directory> subDirectories;
 
     public Directory() {}
     public Directory(String directoryName) {
@@ -113,6 +113,7 @@ public class Directory {
                 return;
             }
         }
+        subDirectory.directoryPath = command;
         directory.subDirectories.add(subDirectory);
         System.out.println("Folder created successfully");
 
@@ -156,34 +157,6 @@ public class Directory {
     }
     
     
-    //method to append to file
-    public static void appendStrToFile(String fileName,
-            String str)
-    {
-    	try {
-            BufferedWriter out = new BufferedWriter(
-                new FileWriter(fileName, true));
- 
-            out.write(str);
-            out.close();
-        }
-        catch (IOException e) 
-    	{
- 
-            System.out.println("exception occurred" + e);
-        }
-    }
-    
-    public void writeFilesPath(Directory dir,  File file) {
-        for (Myfile myfile : dir.files) {
-
-            //System.out.println(myfile.getFilePath());
-        	appendStrToFile(file.getName(), myfile.getFilePath());
-        }
-        for (Directory dir2 : dir.subDirectories) {
-        	writeFilesPath(dir2, file);
-        }
-    }
 
     @Override
     public String toString() {

@@ -8,14 +8,9 @@ public class LinkedAllocation extends AllocationScheme{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void loadVFS(ArrayList<String> arr) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
-	public void saveVFS(File file) {
+	public void saveVFS(File file,  Directory root) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -39,6 +34,12 @@ public class LinkedAllocation extends AllocationScheme{
 	public boolean searchForSpace(Myfile file) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void loadVFS(ArrayList<String> arr, Directory root) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
