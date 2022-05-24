@@ -34,7 +34,7 @@ public class Directory {
         this.directoryName = directoryName;
     }
 
-    public void createFile(String[] args, AllocationScheme alloc) {
+    public Myfile createFile(String[] args, AllocationScheme alloc) {
 
         String[] path = args[args.length - 2].split("/");
         String fileName = path[path.length - 1];
@@ -47,16 +47,26 @@ public class Directory {
         for (Myfile file : parentDirectory.files) {
             if (file.getFileName().equalsIgnoreCase(fileName)) {
                 System.out.println("File already existed");
-                return;
+                return null;
             }
         }
         
-        if(alloc.searchForSpace(createdFile)) 						//Allocation
+        if(alloc.searchForSpace(createdFile)) 
+        {
         	parentDirectory.files.add(createdFile);
+        }
+        	
+        else
+        {
+        	System.out.println("There is no space");
+        	return null;
+        }
+        	
         
-        
+        //System.out.println(createdFile.getFileSize());
         //System.out.println(parentDirectory.directoryName);
         System.out.println("File created successfully");
+        return createdFile;
 
     }
 
@@ -119,19 +129,22 @@ public class Directory {
 
     }
 
-    public void deleteSubDirectories() {
-        files.clear();
+    public void deleteSubDirectories(AllocationScheme alloc) {
+        for(Myfile file:files)
+        {
+        	alloc.deallocateBlocks(file);
+        }
         for (Directory dir : subDirectories) {
-            dir.deleteSubDirectories();
+            dir.deleteSubDirectories(alloc);
         }
     }
 
-    public void deleteFolder(String command) {
+    public void deleteFolder(String command, AllocationScheme alloc) {
         String[] splitPath = command.split("/");
         Directory parentDirectory = getPreviousDirectory(splitPath);
         for (Directory sub : parentDirectory.subDirectories) {
             if (sub.getDirectoryName().equalsIgnoreCase(splitPath[splitPath.length - 1])) {
-                sub.deleteSubDirectories();
+                sub.deleteSubDirectories(alloc);
                 parentDirectory.subDirectories.remove(sub);
                 System.out.println("Folder removed successfully");
                 return;

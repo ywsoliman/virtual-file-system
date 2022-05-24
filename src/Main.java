@@ -54,7 +54,6 @@ public class Main {
             else if (data.equalsIgnoreCase("Linked"))
             	alloc = new LinkedAllocation(diskSize, root);
             
-            System.out.println(data);
             alloc.setSpaceManager(bf.readLine());
             
             data = bf.readLine();
@@ -63,7 +62,6 @@ public class Main {
         		restOfVFS.add(data);
         		data = bf.readLine();
         	}
-        	System.out.println(restOfVFS.toString());
         	bf.close();
         	alloc.loadVFS(restOfVFS, root);
         	
@@ -118,7 +116,7 @@ public class Main {
                 if (command[0].equalsIgnoreCase("exit"))
                     break;
                 if (command[0].equalsIgnoreCase("DisplayDiskStatus")) {
-
+                	alloc.DisplayDiskStatus();
                 }
                 else if (command[0].equalsIgnoreCase("DisplayDiskStructure")) {
                     root.printDirectoryStructure(0);
@@ -130,7 +128,7 @@ public class Main {
                     root.createFolder(command[1]);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFolder")) {
-                    root.deleteFolder(command[1]);
+                    root.deleteFolder(command[1], alloc);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFile")) {
                     root.deleteFile(command[1], alloc);
@@ -140,7 +138,7 @@ public class Main {
             }
             else if (command.length == 3)
             {
-                root.createFile(command, alloc);
+                alloc.allocateBlocks(root.createFile(command, alloc));
             }
             else
                 System.out.println("Something went wrong. Try again.");

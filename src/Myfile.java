@@ -1,14 +1,17 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class Myfile {
 
     private String fileName;
     private String filePath;
     private int fileSize;
-    private ArrayList<Integer> allocatedBlocks;
+    
+    public LinkedList<Integer> linkedBlocksList = new LinkedList<>();
+    public int startBlock;
+    public int endBlock;
    
     public Myfile(String fileName, int fileSize) {
-        allocatedBlocks = new ArrayList<>();
         this.fileName = fileName;
         this.fileSize = fileSize;
     }

@@ -18,8 +18,13 @@ public class ContiguousAllocation extends AllocationScheme {
 	}
 
 
+
+	
+
 	@Override
-	public boolean searchForSpace(Myfile file) {
+	public void allocateBlocks(Myfile file) {
+		int startBlock = 0;
+		
 		int counter = 0;
 		for(int i=0; i<diskSize; i++)
 		{
@@ -30,17 +35,11 @@ public class ContiguousAllocation extends AllocationScheme {
 			//System.out.println(counter);
 			if(counter>=file.getFileSize())
 			{
-				allocateBlocks(file, (i-counter)+1);
-				return true;
+				startBlock = (i-counter)+1;
+				break;
 			}
 		}
-		return false;
 		
-	}
-	
-
-	@Override
-	public void allocateBlocks(Myfile file, int startBlock) {
 		String newstr = "";
 		for(int i=0; i<spaceManager.length(); i++)
 		{
@@ -50,6 +49,7 @@ public class ContiguousAllocation extends AllocationScheme {
 		}
 		spaceManager = newstr;
 		filesData.put(file, startBlock);
+		freeBlocks -= file.getFileSize();
 	}
 	
 	
@@ -64,9 +64,8 @@ public class ContiguousAllocation extends AllocationScheme {
 				newstr += '0';
 			else newstr += spaceManager.charAt(i);
 		}
-		spaceManager = newstr;
-		filesData.put(file, startBlock);
-		
+		spaceManager = newstr;		
+		freeBlocks += file.getFileSize();
 		filesData.remove(file);
 	}
 	
@@ -140,12 +139,19 @@ public class ContiguousAllocation extends AllocationScheme {
 				command[0]=tempArray[0];
 				command[1]=tempArray[1];
 				command[2]=tempArray[3];
-				root.createFile(command, this);
+				Myfile file = root.createFile(command, this);
+				allocateFromFile(file, Integer.parseInt(tempArray[2]));
+				freeBlocks -= file.getFileSize();
 			}
 			else
 				root.createFolder(arr.get(i));
 		}
 		
+	}
+	
+	public void allocateFromFile(Myfile file, int start)
+	{
+		filesData.put(file, start);
 	}
 	
 }

@@ -21,6 +21,7 @@ public abstract class AllocationScheme {
 		freeBlocks = diskSize;
 		
 	}
+	
 	public void setSpaceManager(String data)
 	{
 		spaceManager = data;
@@ -28,8 +29,32 @@ public abstract class AllocationScheme {
 	
 	public abstract void loadVFS(ArrayList<String> arr, Directory root);
 	public abstract void saveVFS(File file, Directory root);
-	public abstract void allocateBlocks(Myfile file, int startBlock);
+	public abstract void allocateBlocks(Myfile file);
 	public abstract void deallocateBlocks(Myfile file);
-	public abstract boolean searchForSpace(Myfile file);
+	
+	public void DisplayDiskStatus()
+	{
+    	System.out.println("Empty space: "+this.freeBlocks);
+    	System.out.println("Empty Allocated space: "+ (this.diskSize-this.freeBlocks));
+    	System.out.print("Empty Blocks in the Disk: ");
+    	for(int i=0; i<spaceManager.length(); i++)
+    	{
+    		if(spaceManager.charAt(i)=='0')
+    			System.out.print(i+" ");
+    	}
+    	System.out.println();
+    	System.out.print("Allocated Blocks in the Disk: ");
+    	for(int i=0; i<spaceManager.length(); i++)
+    	{
+    		if(spaceManager.charAt(i)=='1')
+    			System.out.print(i+" ");
+    	}
+    	System.out.println();
+	}
+	
+	public boolean searchForSpace(Myfile file)
+	{
+		return freeBlocks>=file.getFileSize();
+	}
 	
 }
