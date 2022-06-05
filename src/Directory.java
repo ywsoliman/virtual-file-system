@@ -166,6 +166,19 @@ public class Directory {
         }
     }
     
+    public Directory searchForDirectory(String name, Directory root) {
+        for (Directory dir : root.subDirectories)
+        {
+            if (dir.getDirectoryPath().equalsIgnoreCase(name))
+            	return dir;
+            if(dir.subDirectories.size()!=0)
+            {
+            	Directory dir2 = searchForDirectory(name, dir);
+            	if(dir2!=null) return dir2;
+            }	
+        }
+        return null;
+    }
     
 
     @Override

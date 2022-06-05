@@ -12,11 +12,15 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         
+        UserDB userDB = new UserDB();
+        
         Directory root = new Directory("root");
         AllocationScheme alloc = null;
         int diskSize = 0;
         
         File myObj = new File("DiskStructure.txt");
+        File userFile = new File("User.txt");
+        File CapFile = new File("Capabilities.txt");
         
         if (myObj.createNewFile()) {  //VFS file is created for the first time
             int allocationMethod;
@@ -34,6 +38,9 @@ public class Main {
             	alloc = new IndexedAllocation(diskSize, root);
             else if (allocationMethod == 3)
             	alloc = new LinkedAllocation(diskSize, root);
+            
+        	userFile.createNewFile();
+        	CapFile.createNewFile();
             
         } else { //Loading the data from VFS file
         	
@@ -63,16 +70,18 @@ public class Main {
         	bf.close();
         	alloc.loadVFS(restOfVFS, root);
         	
+        	userDB.loadUsers(userFile);
+        	userDB.loadCapabilities(CapFile);
         }
         
-
-
-
-        
-
-
-
-
+        //CUser ahmed pass123
+        //CUser hassan pass123
+        //CreateFolder root/folder1
+        //Grant ahmed root/folder1 10
+        //Grant hassan root/folder1 10
+        //Login ahmed pass123
+        //CreateFile root/folder1/file.txt 
+        //DeleteFile root/folder1/file.txt ---can't---
 
         
 
@@ -90,33 +99,53 @@ public class Main {
                 else if (command[0].equalsIgnoreCase("DisplayDiskStructure")) {
                     root.printDirectoryStructure(0);
                 }
+                else //TellUser
+                	System.out.println(userDB.getCurrUser());
+                	
             }
             else if (command.length == 2)
             {
                 if (command[0].equalsIgnoreCase("CreateFolder")) {
-                    root.createFolder(command[1]);
+                	if(userDB.creationCheck(command[1]))
+                		root.createFolder(command[1]);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFolder")) {
-                    root.deleteFolder(command[1], alloc);
+                	if(userDB.deletionCheck(command[1]))
+                		root.deleteFolder(command[1], alloc);
                 }
                 else if (command[0].equalsIgnoreCase("DeleteFile")) {
-                    root.deleteFile(command[1], alloc);
+                	if(userDB.deletionCheck(command[1]))
+                		root.deleteFile(command[1], alloc);
                 }
                 else
                     System.out.println("Invalid arguments.");
             }
             else if (command.length == 3)
             {
-                Myfile file = root.createFile(command, alloc);
-                if(file != null)
-                	alloc.allocateBlocks(file);
+            	if(command[0].equalsIgnoreCase("CUser")) //CUser
+            		userDB.createUser(command[1], command[2]);
+            	else if (command[0].equalsIgnoreCase("Login")) //Login
+            		userDB.login(command[1], command[2]);
+            	else 
+	            	if(userDB.creationCheck(command[1]))
+	            	{
+	                	Myfile file = root.createFile(command, alloc);
+	                    if(file != null)
+	                    	alloc.allocateBlocks(file);
+	            	}
+
+            }
+            else if (command.length == 4)
+            {
+            	userDB.grant(command[1], command[2], command[3], root); //grant
             }
             else
                 System.out.println("Something went wrong. Try again.");
 
         }
         
-        
+        userDB.saveUsers(userFile);
+        userDB.saveCapabilities(CapFile);
         alloc.saveVFS(myObj, root);
 
 
